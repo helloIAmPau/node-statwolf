@@ -1,0 +1,59 @@
+{
+  "base": {
+    "metaExtension": ".meta.json",
+    "depsExtension": ".deps.json",
+    "bindExtension": ".bindings.json",
+    "templateExtension": ".template.html",
+    "testExtension": ".test.js",
+    "specExtension": ".spec.js",
+    "languageExtension": {
+      "Python": ".py",
+      "R": ".r",
+      "C#": ".cs"
+    }
+  },
+  "DashboardService": {
+    "extension": ".js",
+    "coreFetcher": "Body",
+    "baseContentTemplate": "Service.js",
+    "hasDependencies": true
+  },
+  "DashboardForm": {
+    "extension": ".js",
+    "coreFetcher": "Resolver",
+    "baseContentTemplate": "FormResolver.js",
+    "bindingsTemplate": "Form.bindings.json",
+    "hasDependencies": false,
+    "hasBindings": true
+  },
+  "DashboardController": {
+    "extension": ".js",
+    "baseContentTemplate": "Controller.js",
+    "coreFetcher": "Body",
+    "hasDependencies": true
+  },
+  "DashboardView": {
+    "extension": ".js",
+    "coreFetcher": "Body",
+    "baseContentTemplate": "View.js",
+    "hasDependencies": true
+  },
+  "DashboardModel": {
+    "extension": ".json",
+    "baseContentTemplate": "Model.json",
+    "hasDependencies": false
+  },
+  "DashboardControlTemplate": {
+    "extension": ".js",
+    "baseContentTemplate": "ControlTemplateDirective.js",
+    "coreFetcher": "Directive",
+    "hasDependencies": true,
+    "hasTemplate": true,
+    "template": "ControlTemplateTemplate.html"
+  },
+  "DashboardScript": {
+    "extension": "",
+    "coreFetcher": "Body",
+    "hasDependencies": true
+  }
+}
