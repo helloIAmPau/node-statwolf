@@ -3,6 +3,7 @@
   "description": "node-statwolf main repo",
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "updated": "lerna updated",
     "test": "lerna run test"
   },
   "repository": {

@@ -2,7 +2,9 @@ var babel = require('babel-core');
 
 module.exports = function(code) {
   return babel.transform(code, {
-    allowReturnOutsideFunction: true,
+    parserOpts: {
+      allowReturnOutsideFunction: true
+    },
     plugins: [
       require("babel-plugin-transform-es2015-template-literals"),
       require("babel-plugin-transform-es2015-literals"),

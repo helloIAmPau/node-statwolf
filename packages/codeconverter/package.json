@@ -1,14 +1,11 @@
 {
-  "name": "codeconverter",
-  "version": "1.0.31",
+  "name": "statwolf-codeconverter",
+  "version": "0.0.0",
   "main": "index.js",
   "bin": {
     "cconverter": "./bin/cconverter.js"
   },
   "description": "Converter for SW code from db dump to filesystem tree representation",
-  "publishConfig": {
-    "registry": "http://git.statwolf.com:5984"
-  },
   "authors": [
     "Antonio Bevilacqua <antonio.bevilacqua@statwolf.com>",
     "Pasquale Boemio <pasquale.boemio@statwolf.com>"
@@ -22,6 +19,6 @@
     "mkdirp": "^0.5.1",
     "require-dir": "^0.3.0",
     "safe-win-path": "0.0.1",
-    "statwolf-babel-preset": "0.0.*"
+    "statwolf-babel-preset": "^0.0.0"
   }
 }
