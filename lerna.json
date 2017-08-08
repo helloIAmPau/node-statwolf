@@ -3,5 +3,8 @@
   "packages": [
     "packages/*"
   ],
+  "npmClientArgs": [
+    "--registry http://dev.statwolf.com:5984"
+  ],
   "version": "0.0.0"
 }
