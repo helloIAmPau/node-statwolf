@@ -8,7 +8,7 @@
 var util = require('util');
 var EventEmitter = require('events');
 var StatwolfService = require('./services/statwolf');
-var CodeConverter = require('codeconverter');
+var CodeConverter = require('statwolf-codeconverter');
 var babel = require('statwolf-babel-preset');
 var fs = require('fs');
 
@@ -29,7 +29,6 @@ var Statwolf = module.exports = function() {
 
   this._statwolfService = new StatwolfService();
 
-  // to verify if a push went fine, just check if the error variable is null...
   this._statwolfService.on('loadDone', function(data, error) {
     self.emit('pushDone', data, error);
   });
@@ -40,18 +39,9 @@ var Statwolf = module.exports = function() {
   this._statwolfService.on('runRemoteCommandDone', function(data, error, id) {
     self.emit('commandEvaluated', data, error);
 
-    if(id) {
+    if (id) {
       self.emit('commandEvaluated::' + id, data, error);
     }
-  });
-  this._statwolfService.on('logClientConnected', function() {
-    self.emit('logEnabled');
-  });
-  this._statwolfService.on('logClientDisconnected', function() {
-    self.emit('logDisabled');
-  });
-  this._statwolfService.on('logData', function(log) {
-    self.emit('logChunkReceived', { content: log });
   });
 };
 util.inherits(Statwolf, EventEmitter);
@@ -67,7 +57,7 @@ var _validateOptions = function(options) {
 
   // the host URL should be a valid http/https address
   var result = options.host.match(/https?:\/\/(\w+\.?)+/);
-  if(!result) throw new Error('Invalid host provided. The format should be: http[s]://remote.host.com');
+  if (!result) throw new Error('Invalid host provided. The format should be: http[s]://remote.host.com');
 
 };
 
@@ -114,13 +104,13 @@ Statwolf.prototype.runCommand = function(options) {
  **/
 Statwolf.prototype.runTests = function(options) {
   _validateOptions(options);
-  if(!Array.isArray(options.testFiles)) options.testFiles = [ options.testFiles ];
+  if (!Array.isArray(options.testFiles)) options.testFiles = [options.testFiles];
 
   var httpConfig = {
     url: options.host,
     port: options.port
   };
-  
+
   var self = this;
 
   // the result object indexed by file path.
@@ -140,12 +130,12 @@ Statwolf.prototype.runTests = function(options) {
     var id = self._statwolfService.runRemoteCommand(httpConfig, content);
     // each command fires a new commandEvaluated event.
     self.once('commandEvaluated::' + id, function(data, error) {
-      if(error) throw new Error(error.message);
+      if (error) throw new Error(error.message);
       results[testFile] = data.logs.map(function(item) {
         return item.msg;
       }).join('\n');
 
-      if(Object.keys(results).length === options.testFiles.length) {
+      if (Object.keys(results).length === options.testFiles.length) {
         // at the end the testsExecuted event is fired with the result object as argument.
         self.emit('testsExecuted', Object.keys(results).map(function(key) {
           return results[key];
@@ -180,47 +170,20 @@ Statwolf.prototype.push = function(options) {
     url: options.host,
     port: options.port
   }, {
-    user: options.userid,
-    key: options.token,
-    delete_all: options.delete_all,
-    changes:  bundle.Items.map(function(item) {
-      return {
-        path: [item.Workspace, item.Name].join('.'),
-        type: item.ComponentType,
-        delete: item.delete,
-        data: item.Serialized
-      };
+    Command: 'Publish',
+    Data: JSON.stringify({
+      user: options.userid,
+      key: options.token,
+      delete_all: options.delete_all,
+      changes: bundle.Items.map(function(item) {
+        return {
+          path: [item.Workspace, item.Name].join('.'),
+          type: item.ComponentType,
+          delete: item.delete,
+          data: item.Serialized
+        };
+      })
     })
   });
 
-};
-
-Statwolf.prototype.delete = function(options) {
-  this._statwolfService.delete({
-    url: options.host,
-    port: options.port
-  }, {
-    user: options.userid,
-    key: options.token,
-    changes: options.Items
-  });
-};
-
-/**
- * enableLog enables the remote logger of the StatwolfService
- *
- * @param {Object} options is the options object for the command.
- * @param {String} options.host is the host of the remote Statwolf environment (it should be a valide http/https url).
- * @param {Number} options.port is the port of the remote Statwolf environment.
- **/
-Statwolf.prototype.enableLog = function(options) {
-  _validateOptions(options);
-  this._statwolfService.enableLog(options);
-};
-
-/**
- * disableLog disables the remote logger of the StatwolfService
- **/
-Statwolf.prototype.disableLog = function() {
-  this._statwolfService.disableLog();
 };

@@ -158,64 +158,10 @@ Statwolf.prototype.loadBundle = function(httpConfig, bundle) {
     self.emit('loadDone', data, error);
   };
 
-  httpConfig.path = '/v1/engine/publish';
+  httpConfig.path = '/api/Custom/DashboardToolbox';
   httpConfig.method = 'POST';
 
-  httpConfig.zipBody = true;
+  //httpConfig.zipBody = true;
 
   doHttpRequest(httpConfig, bundle, responseCallback);
-};
-
-Statwolf.prototype.delete = function(httpConfig, payload) {
-  var self = this;
-
-  var responseCallback = function(message, error) {
-    var data;
-
-    if(!error && message.Data === false)
-      error = { message: 'Invalid request. Check your configurations!' };
-
-    data = error ? undefined : message.Data;
-    self.emit('deleteDone', data, error);
-  };
-
-  httpConfig.path = '/v1/engine/delete';
-  httpConfig.method = 'POST';
-
-  doHttpRequest(httpConfig, payload, responseCallback);
-};
-
-/**
- * enableLog creates a new Statwolf log client.
- *
- * @fires logClientConnected when a new connection is established.
- * @fires logData evety time a new chunk of log file is received.
- **/
-Statwolf.prototype.enableLog = function(opts) {
-  var self = this;
-
-  var onConnected = function() {
-    self.emit('logClientConnected');
-  };
-  this.logClient = net.connect(opts, onConnected);
-
-  var onData = function(data) {
-    self.emit('logData', data.toString());
-  };
-  this.logClient.on('data', onData);
-};
-
-/**
- * disableLog destroys the current log client and remove any registered listener.
- *
- * @fires logClientDisconnected once the current log client is destroyed.
- **/
-Statwolf.prototype.disableLog = function() {
-  if(!this.logClient) return;
-
-  this.logClient.end();
-  this.logClient.removeAllListeners('data');
-  this.logClient = null;
-
-  this.emit('logClientDisconnected');
 };
