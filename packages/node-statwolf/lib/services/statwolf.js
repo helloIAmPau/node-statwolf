@@ -78,6 +78,7 @@ var _doRequest = function(requestConfig, body, callback) {
 
   request.on('error', function(error) {
     console.log(error);
+    console.log(error.stack)
     callback(null, error);
   });
 
@@ -161,7 +162,8 @@ Statwolf.prototype.loadBundle = function(httpConfig, bundle) {
   httpConfig.path = '/api/Custom/DashboardToolbox';
   httpConfig.method = 'POST';
 
-  //httpConfig.zipBody = true;
+  /* NOT SUPPORTED RIGHT NOW */
+  httpConfig.zipBody = true;
 
   doHttpRequest(httpConfig, bundle, responseCallback);
 };
