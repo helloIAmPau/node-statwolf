@@ -1,6 +1,6 @@
 {
   "name": "statwolf",
-  "version": "0.0.0",
+  "version": "0.0.1-0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -10,8 +10,8 @@
   "author": "Pasquale Boemio <pasquale.boemio@statwolf.com>",
   "license": "MIT",
   "dependencies": {
-    "statwolf-codeconverter": "^0.0.0",
-    "statwolf-babel-preset": "^0.0.0"
+    "statwolf-babel-preset": "^0.0.1-0",
+    "statwolf-codeconverter": "^0.0.1-0"
   },
   "devDependencies": {
     "chai": "^3.3.0",
@@ -21,7 +21,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.3.3",
-    "statwolf-mocks": "^0.0.0",
-    "sandboxed-module": "^2.0.3"
+    "sandboxed-module": "^2.0.3",
+    "statwolf-mocks": "^0.0.1-0"
   }
 }
