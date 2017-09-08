@@ -1,10 +1,10 @@
 {
   "lerna": "2.0.0",
+  "version": "0.0.2",
   "packages": [
     "packages/*"
   ],
   "npmClientArgs": [
     "--registry http://dev.statwolf.com:5984"
-  ],
-  "version": "0.0.1-0"
+  ]
 }
