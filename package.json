@@ -2,9 +2,9 @@
   "name": "node-statwolf",
   "description": "node-statwolf main repo",
   "scripts": {
+    "publish": "lerna publish --cd-version=patch --force-publish=* --yes",
     "bootstrap": "lerna bootstrap",
     "updated": "lerna updated",
-    "publish": "lerna publish",
     "test": "lerna run test"
   },
   "repository": {
