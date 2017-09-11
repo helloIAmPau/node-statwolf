@@ -160,17 +160,27 @@ Statwolf.prototype.loadBundle = function(httpConfig, bundle) {
   var command = 'var key = `lastResourceUpdate_${$user.changesetName()}`; var res = $environment().set({ [key]: new Date() }); console.log(`Updated: ${ res }`); return res;';
 
   var responseCallback = function(message, error) {
+    var data;
+
+    if(!error && message.Data === false)
+      error = { message: 'Invalid request. Check your configurations!' };
+
+    data = error ? undefined : message.Data;
+
+    var fix = data != null && Object.keys(data).some(function(path) {
+      return path.endsWith('.Client') || path.endsWith('.ServerInstall') || path.endsWith('.Toolboxes');
+    })
+
+    if(fix === false) {
+      self.emit('loadDone', data, error);
+      return;
+    }
+
     self.once('internalCommandDone', function() {
-      var data;
-
-      if(!error && message.Data === false)
-        error = { message: 'Invalid request. Check your configurations!' };
-
-      data = error ? undefined : message.Data;
       self.emit('loadDone', data, error);
     });
 
-    this.runRemoteCommand(httpConfig, {
+    self.runRemoteCommand(httpConfig, {
       Command: 'InvokeConsole',
       Data: JSON.stringify({
         user: httpConfig.user,
