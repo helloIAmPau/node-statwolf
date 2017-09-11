@@ -177,7 +177,7 @@ Statwolf.prototype.loadBundle = function(httpConfig, bundle) {
         key: httpConfig.key,
         command
       })
-    });
+    }, true);
   };
 
   httpConfig.path = '/api/Custom/DashboardToolbox';
