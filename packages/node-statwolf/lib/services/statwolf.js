@@ -106,7 +106,9 @@ var doHttpRequest = function(requestConfig, body, callback) {
  * @param {String} requestData.Command is the command the user wants to execute.
  * @param {String} requestData.Data is the stringified version of the command argument object.
  **/
-Statwolf.prototype.runRemoteCommand = function(httpConfig, requestData) {
+Statwolf.prototype.runRemoteCommand = function(httpConfig, requestData, internal) {
+  internal = internal || false;
+
   var self = this;
   var commandId = Math.random().toString(26).substring(3, 7);
 
@@ -119,6 +121,12 @@ Statwolf.prototype.runRemoteCommand = function(httpConfig, requestData) {
       logs: response.Data.logs,
       result: response.Data.result
     } : null;
+
+    if(internal === true) {
+      self.emit('internalCommandDone');
+      return;
+    }
+
     self.emit('runRemoteCommandDone', data, error, commandId);
   };
 
@@ -149,20 +157,32 @@ Statwolf.prototype.runRemoteCommand = function(httpConfig, requestData) {
 Statwolf.prototype.loadBundle = function(httpConfig, bundle) {
   var self = this;
 
+  var command = 'var key = `lastResourceUpdate_${$user.changesetName()}`; var res = $environment().set({ [key]: new Date() }); console.log(`Updated: ${ res }`); return res;';
+
   var responseCallback = function(message, error) {
-    var data;
+    self.once('internalCommandDone', function() {
+      var data;
 
-    if(!error && message.Data === false)
-      error = { message: 'Invalid request. Check your configurations!' };
+      if(!error && message.Data === false)
+        error = { message: 'Invalid request. Check your configurations!' };
 
-    data = error ? undefined : message.Data;
-    self.emit('loadDone', data, error);
+      data = error ? undefined : message.Data;
+      self.emit('loadDone', data, error);
+    });
+
+    this.runRemoteCommand(httpConfig, {
+      Command: 'InvokeConsole',
+      Data: JSON.stringify({
+        user: httpConfig.user,
+        key: httpConfig.key,
+        command
+      })
+    });
   };
 
   httpConfig.path = '/api/Custom/DashboardToolbox';
   httpConfig.method = 'POST';
 
-  /* NOT SUPPORTED RIGHT NOW */
   httpConfig.zipBody = true;
 
   doHttpRequest(httpConfig, bundle, responseCallback);

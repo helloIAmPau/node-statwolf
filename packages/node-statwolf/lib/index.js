@@ -168,7 +168,9 @@ Statwolf.prototype.push = function(options) {
 
   this._statwolfService.loadBundle({
     url: options.host,
-    port: options.port
+    port: options.port,
+    user: options.userid,
+    key: options.token
   }, {
     Command: 'Publish',
     Data: JSON.stringify({
