@@ -1,6 +1,6 @@
 {
   "name": "statwolf-babel-preset",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Babel preset for the statwolf environment",
   "main": "index.js",
   "dependencies": {
