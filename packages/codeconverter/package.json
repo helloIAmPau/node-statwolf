@@ -1,6 +1,6 @@
 {
   "name": "statwolf-codeconverter",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "main": "index.js",
   "bin": {
     "cconverter": "./bin/cconverter.js"
@@ -19,6 +19,6 @@
     "mkdirp": "^0.5.1",
     "require-dir": "^0.3.0",
     "safe-win-path": "0.0.1",
-    "statwolf-babel-preset": "^0.0.12"
+    "statwolf-babel-preset": "^0.0.13"
   }
 }
