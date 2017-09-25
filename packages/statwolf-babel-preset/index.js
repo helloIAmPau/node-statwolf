@@ -22,8 +22,7 @@ module.exports = function(code) {
       require("babel-plugin-transform-es2015-spread"),
       require("babel-plugin-transform-es2015-parameters"),
       require("babel-plugin-transform-es2015-destructuring"),
-      require("babel-plugin-transform-es2015-block-scoping"),
-      [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }],
+      require("babel-plugin-transform-es2015-block-scoping")
     ]
   }).code;
 };
