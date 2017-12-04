@@ -23,7 +23,7 @@ module.exports = function(code) {
       require("babel-plugin-transform-es2015-parameters"),
       require("babel-plugin-transform-es2015-destructuring"),
       require("babel-plugin-transform-es2015-block-scoping"),
-      require("babel-plugin-transform-optional-chaining")
+      require("babel-plugin-transform-convert-debugger")
     ]
   }).code;
 };
