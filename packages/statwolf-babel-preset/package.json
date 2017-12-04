@@ -1,11 +1,12 @@
 {
   "name": "statwolf-babel-preset",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Babel preset for the statwolf environment",
   "main": "index.js",
   "dependencies": {
     "babel-core": "6.22.0",
     "babel-plugin-check-es2015-constants": "6.22.0",
+    "babel-plugin-transform-convert-debugger": "^0.0.15",
     "babel-plugin-transform-es2015-arrow-functions": "6.22.0",
     "babel-plugin-transform-es2015-block-scoped-functions": "6.22.0",
     "babel-plugin-transform-es2015-block-scoping": "6.22.0",
@@ -22,8 +23,7 @@
     "babel-plugin-transform-es2015-sticky-regex": "6.22.0",
     "babel-plugin-transform-es2015-template-literals": "6.22.0",
     "babel-plugin-transform-es2015-typeof-symbol": "6.22.0",
-    "babel-plugin-transform-es2015-unicode-regex": "6.22.0",
-    "babel-plugin-transform-convert-debugger": "0.0.14"
+    "babel-plugin-transform-es2015-unicode-regex": "6.22.0"
   },
   "author": "Pasquale Boemio <pasquale.boemio@statwolf.com>"
 }
