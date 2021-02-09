@@ -84,6 +84,10 @@ module.exports = function(options) {
   var toBeIgnored = function(element) {
     element = element.replace(new RegExp('\\' + path.sep, 'g'), '/');
 
+    if(!element.startsWith('/')) {
+      element = `/${ element }`;
+    }
+
     return ignoreArray.some(function(ignore) {
       if (ignore.endsWith('/')) {
         return element.startsWith(ignore);
