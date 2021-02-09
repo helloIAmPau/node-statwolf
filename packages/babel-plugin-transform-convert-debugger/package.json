@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-convert-debugger",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Convert debugger statements into statwolf-debugger statements",
   "keywords": [
     "babel-plugin"
