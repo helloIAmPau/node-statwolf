@@ -158,34 +158,38 @@ Statwolf.prototype.runTests = function(options) {
  * @param {String[]} options.deleted is the list of the files to remove from the Statwolf changeset.
  **/
 Statwolf.prototype.push = function(options) {
-  _validateOptions(options);
+  try {
+    _validateOptions(options);
 
-  var bundle = CodeConverter.compress({
-    dir: options.basedir ? options.basedir + '/' : './',
-    changeset: options.changes,
-    deletedset: options.deleted,
-  });
+    var bundle = CodeConverter.compress({
+      dir: options.basedir ? options.basedir + '/' : './',
+      changeset: options.changes,
+      deletedset: options.deleted,
+    });
 
-  this._statwolfService.loadBundle({
-    url: options.host,
-    port: options.port,
-    user: options.userid,
-    key: options.token
-  }, {
-    Command: 'Publish',
-    Data: JSON.stringify({
+    this._statwolfService.loadBundle({
+      url: options.host,
+      port: options.port,
       user: options.userid,
-      key: options.token,
-      delete_all: options.delete_all,
-      changes: bundle.Items.map(function(item) {
-        return {
-          path: [item.Workspace, item.Name].join('.'),
-          type: item.ComponentType,
-          delete: item.delete,
-          data: item.Serialized
-        };
+      key: options.token
+    }, {
+      Command: 'Publish',
+      Data: JSON.stringify({
+        user: options.userid,
+        key: options.token,
+        delete_all: options.delete_all,
+        changes: bundle.Items.map(function(item) {
+          return {
+            path: [item.Workspace, item.Name].join('.'),
+            type: item.ComponentType,
+            delete: item.delete,
+            data: item.Serialized
+          };
+        })
       })
-    })
-  });
+    });
+  } catch(e) {
+    this.emit('pushDone', null, e);
+  }
 
 };
