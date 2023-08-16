@@ -1,0 +1,12 @@
+{
+  "name": "@statwolf/cli",
+  "scripts": {
+    "build": "esbuild index.js --outdir=dist --sourcemap --bundle --platform=node --external:@babel/preset-typescript/package.json",
+    "develop": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "cli-spinner": "0.2.10",
+    "esbuild": "0.19.1",
+    "yargs": "17.7.2"
+  }
+}

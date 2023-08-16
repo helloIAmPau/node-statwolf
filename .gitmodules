@@ -1,0 +1,3 @@
+[submodule "statwolf"]
+	path = statwolf
+	url = git@github.com:Statwolf/statwolf.git

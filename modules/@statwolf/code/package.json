@@ -1,0 +1,6 @@
+{
+  "name": "@statwolf/code",
+  "devDependencies": {
+    "esbuild": "0.19.1"
+  }
+}
