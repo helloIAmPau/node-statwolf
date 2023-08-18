@@ -1,0 +1,112 @@
+{
+  "name": "code",
+  "displayName": "@statwolf/code",
+  "publisher": "statwolf",
+  "version": "0.0.0",
+  "description": "The statwolf default vscode extension",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Statwolf/node-statwolf.git"
+  },
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "scripts": {
+    "package": "mkdir -p ../../../dist && rm -rfv ../../../dist/statwolf-code.vsix && npm run build && vsce package --no-dependencies --out='../../../dist/statwolf-code.vsix'",
+    "build": "esbuild index.js --bundle --outfile=dist/index.js --external:vscode --loader:.html=text --format=cjs --platform=node --sourcemap --external:@babel/preset-typescript/package.json",
+    "develop": "npm run build -- --watch"
+  },
+  "contributes": {
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "statwolf.pushFolder"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "statwolf.selectEnv",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e"
+      },
+      {
+        "command": "statwolf.execute",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter"
+      },
+      {
+        "command": "statwolf.fullPush",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p"
+      }
+    ],
+    "commands": [
+      {
+        "command": "statwolf.selectEnv",
+        "title": "Select statwolf endpoint"
+      },
+      {
+        "command": "statwolf.execute",
+        "title": "Execute current buffer"
+      },
+      {
+        "command": "statwolf.fullPush",
+        "title": "Push full codebase"
+      },
+      {
+        "command": "statwolf.pushFolder",
+        "title": "Push current folder"
+      }
+    ],
+    "views": {
+      "statwolf-sidebar-execute-panel": [
+        {
+          "id": "statwolf-execute-panel",
+          "name": "Statwolf",
+          "type": "webview"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "statwolf-sidebar-execute-panel",
+          "title": "Statwolf",
+          "icon": "media/icon.png"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Statwolf",
+      "properties": {
+        "statwolf.project": {
+          "type": "string",
+          "description": "Default statwolf project location"
+        },
+        "statwolf.hosts": {
+          "type": "array",
+          "description": "List of statwolf endpoints",
+          "items": {
+            "type": "string",
+            "title": "Host"
+          },
+          "default": [
+            "https://statwolf:test123@portal.statwolf",
+            "https://boss:test123@portal.statwolf"
+          ]
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@vscode/vsce": "2.20.1",
+    "debounce": "1.2.1",
+    "esbuild": "0.19.1",
+    "node-fetch": "3.3.2"
+  }
+}

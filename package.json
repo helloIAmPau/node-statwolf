@@ -1,23 +1,9 @@
 {
-  "name": "node-statwolf",
-  "description": "node-statwolf main repo",
+  "name": "@statwolf/repo",
   "scripts": {
-    "publish": "lerna publish --cd-version=patch --force-publish=* --yes",
-    "bootstrap": "lerna bootstrap",
-    "updated": "lerna updated",
-    "test": "lerna run test"
+    "extension": "npm --workspace code run package"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/statwolf/node-statwolf.git"
-  },
-  "author": "Pasquale Boemio <boemianrapsodi@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/statwolf/node-statwolf/issues"
-  },
-  "homepage": "https://github.com/statwolf/node-statwolf#readme",
-  "devDependencies": {
-    "lerna": "^2.0.0"
-  }
+  "workspaces": [
+    "modules/**/*"
+  ]
 }
