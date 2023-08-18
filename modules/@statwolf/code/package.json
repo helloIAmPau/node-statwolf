@@ -1,9 +1,14 @@
 {
-  "name": "@statwolf/code",
+  "name": "code",
   "displayName": "@statwolf/code",
+  "publisher": "statwolf",
   "version": "0.0.0",
   "description": "The statwolf default vscode extension",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Statwolf/node-statwolf.git"
+  },
   "engines": {
     "vscode": "^1.81.0"
   },
@@ -11,6 +16,7 @@
     "onStartupFinished"
   ],
   "scripts": {
+    "package": "mkdir -p ../../../dist && rm -rfv ../../../dist/statwolf-code.vsix && npm run build && vsce package --no-dependencies --out='../../../dist/statwolf-code.vsix'",
     "build": "esbuild index.js --bundle --outfile=dist/index.js --external:vscode --loader:.html=text --format=cjs --platform=node --sourcemap --external:@babel/preset-typescript/package.json",
     "develop": "npm run build -- --watch"
   },
@@ -58,14 +64,14 @@
       }
     ],
     "views": {
-			"statwolf-sidebar-execute-panel": [
-				{
-					"id": "statwolf-execute-panel",
-					"name": "Statwolf",
+      "statwolf-sidebar-execute-panel": [
+        {
+          "id": "statwolf-execute-panel",
+          "name": "Statwolf",
           "type": "webview"
-				}
-			]
-		},
+        }
+      ]
+    },
     "viewsContainers": {
       "activitybar": [
         {
@@ -74,8 +80,7 @@
           "icon": "media/icon.png"
         }
       ]
-    }
-    ,
+    },
     "configuration": {
       "title": "Statwolf",
       "properties": {
@@ -99,6 +104,7 @@
     }
   },
   "devDependencies": {
+    "@vscode/vsce": "2.20.1",
     "debounce": "1.2.1",
     "esbuild": "0.19.1",
     "node-fetch": "3.3.2"
