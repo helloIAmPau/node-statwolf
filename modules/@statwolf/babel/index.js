@@ -1,4 +1,5 @@
 import { transformAsync } from '@babel/core';
+import preset from '@babel/preset-env';
 
 export default function(code) {
   return transformAsync(code, {
@@ -8,7 +9,7 @@ export default function(code) {
       allowReturnOutsideFunction: true
     },
     presets: [
-      '@babel/preset-env'
+      preset
     ]
   });
 };

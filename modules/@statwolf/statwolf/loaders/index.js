@@ -10,6 +10,8 @@ import { join, resolve } from 'path';
 
 import babel from '@statwolf/babel';
 
+import { log } from '../logger';
+
 const resolvePath = function({ folder, name, extension }) {
   return resolve(folder, `${ name }${ extension }`);
 
@@ -73,31 +75,31 @@ export default function({ meta, folder, servicePath, name }) {
   return Promise.resolve().then(function() {
     if(ComponentType === 'DashboardService' || ComponentType === 'DashboardController' || ComponentType === 'DashboardView') {
       return body(input).catch(function(error) {
-        console.log(input);
+        log(error.message);
       });
     }
 
     if(ComponentType === 'DashboardScript') {
       return script(input).catch(function(error) {
-        console.log(input);
+        log(error.message);
       });
     }
 
     if(ComponentType === 'DashboardForm') {
       return resolver(input).catch(function(error) {
-        console.log(input);
+        log(error.message);
       });
     }
 
     if(ComponentType === 'DashboardModel') {
       return model(input).catch(function(error) {
-        console.log(input);
+        log(error.message);
       });
     }
 
     if(ComponentType === 'DashboardControlTemplate') {
       return directive(input).catch(function(error) {
-        console.log(input);
+        log(error.message);
       });
     }
 

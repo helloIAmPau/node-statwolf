@@ -1,4 +1,5 @@
 import { readFile } from 'fs/promises';
+import { log } from '../logger';
 
 export default function({ deps, folder, name, code, resolvePath }) {
   return code({ folder, name }).then(function(Directive) {
@@ -14,7 +15,7 @@ export default function({ deps, folder, name, code, resolvePath }) {
         throw error;
       }
 
-      console.log(`${ templatePath } not found`);
+      log(`${ templatePath } not found`);
 
       return undefined;
     }).then(function(Template) {
