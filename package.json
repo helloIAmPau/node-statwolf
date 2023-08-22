@@ -1,9 +1,12 @@
 {
   "name": "@statwolf/repo",
   "scripts": {
-    "extension": "npm --workspace code run package"
+    "extension": "npm --workspace code run extension"
   },
   "workspaces": [
     "modules/**/*"
-  ]
+  ],
+  "dependencies": {
+    "@babel/preset-env": "^7.22.10"
+  }
 }

@@ -1,0 +1,8 @@
+.DS_Store
+*.map
+.vscode/
+components
+extension.sh
+index.js
+logger.js
+state.js
