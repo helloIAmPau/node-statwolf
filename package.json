@@ -5,8 +5,5 @@
   },
   "workspaces": [
     "modules/**/*"
-  ],
-  "dependencies": {
-    "@babel/preset-env": "^7.22.10"
-  }
+  ]
 }
