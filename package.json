@@ -1,7 +1,7 @@
 {
   "name": "@statwolf/repo",
   "scripts": {
-    "extension": "npm --workspace code run package"
+    "extension": "npm --workspace code run extension"
   },
   "workspaces": [
     "modules/**/*"

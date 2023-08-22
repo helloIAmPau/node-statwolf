@@ -1,6 +1,7 @@
 {
   "name": "code",
   "displayName": "@statwolf/code",
+  "icon": "media/icon.png",
   "publisher": "statwolf",
   "version": "0.0.0",
   "description": "The statwolf default vscode extension",
@@ -16,8 +17,8 @@
     "onStartupFinished"
   ],
   "scripts": {
-    "package": "mkdir -p ../../../dist && rm -rfv ../../../dist/statwolf-code.vsix && npm run build && vsce package --no-dependencies --out='../../../dist/statwolf-code.vsix'",
-    "build": "esbuild index.js --bundle --outfile=dist/index.js --external:vscode --loader:.html=text --format=cjs --platform=node --sourcemap --external:@babel/preset-typescript/package.json",
+    "extension": "./extension.sh",
+    "build": "esbuild index.js --bundle --outfile=dist/index.js --external:vscode --loader:.html=text --format=cjs --platform=node --sourcemap --external:@babel/preset-env --external:@babel/preset-typescript/package.json",
     "develop": "npm run build -- --watch"
   },
   "contributes": {
