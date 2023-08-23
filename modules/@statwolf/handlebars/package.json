@@ -1,0 +1,6 @@
+{
+  "name": "@statwolf/handlebars",
+  "devDependencies": {
+    "handlebars": "4.7.8"
+  }
+}
