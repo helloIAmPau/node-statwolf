@@ -1,7 +1,7 @@
 import { window } from 'vscode';
 
 export default function() {
-    const channel = window.createOutputChannel("Statwolf");
+    const channel = window.createOutputChannel('Statwolf');
 
     const log = function(message) {
         if(typeof(message) !== 'string') {

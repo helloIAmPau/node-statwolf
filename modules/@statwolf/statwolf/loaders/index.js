@@ -74,33 +74,23 @@ export default function({ meta, folder, servicePath, name }) {
 
   return Promise.resolve().then(function() {
     if(ComponentType === 'DashboardService' || ComponentType === 'DashboardController' || ComponentType === 'DashboardView') {
-      return body(input).catch(function(error) {
-        log(error.message);
-      });
+      return body(input);
     }
 
     if(ComponentType === 'DashboardScript') {
-      return script(input).catch(function(error) {
-        log(error.message);
-      });
+      return script(input);
     }
 
     if(ComponentType === 'DashboardForm') {
-      return resolver(input).catch(function(error) {
-        log(error.message);
-      });
+      return resolver(input);
     }
 
     if(ComponentType === 'DashboardModel') {
-      return model(input).catch(function(error) {
-        log(error.message);
-      });
+      return model(input);
     }
 
     if(ComponentType === 'DashboardControlTemplate') {
-      return directive(input).catch(function(error) {
-        log(error.message);
-      });
+      return directive(input);
     }
 
     throw new Error(`Invalid component type ${ ComponentType }`);

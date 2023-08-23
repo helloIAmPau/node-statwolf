@@ -89,6 +89,11 @@
           "type": "string",
           "description": "Default statwolf project location"
         },
+        "statwolf.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show/hide notification messages"
+        },
         "statwolf.hosts": {
           "type": "array",
           "description": "List of statwolf endpoints",

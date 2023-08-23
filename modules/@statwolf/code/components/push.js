@@ -3,7 +3,7 @@ import { commands, workspace } from 'vscode';
 import { dirname, sep, join } from 'path';
 import debounce from 'debounce';
 
-export default function({ state, context, log }) {
+export default function({ state, context, log, viewProvider, notify }) {
     let host = null;
     let project = null;
     let isPushing = false;
@@ -22,6 +22,7 @@ export default function({ state, context, log }) {
         }
 
         isPushing = true;
+        viewProvider.setSpin(isPushing);
 
         bundle({
             input,
@@ -29,11 +30,18 @@ export default function({ state, context, log }) {
             host,
             project
         }).then(function(result) {
-            log(`${ Object.keys(result.Data).length } file pushed`);
-        }).catch(function(error) {
-            log(error);
+            const message = `${ Object.keys(result.Data).length } file pushed`;
+            
+            log(message);
+            notify(message);
+            viewProvider.setError(undefined);
+        }).catch(function({ message }) {
+            log(message);
+            notify(message, 'error');
+            viewProvider.setError(message);
         }).finally(function() {
             isPushing = false;
+            viewProvider.setSpin(isPushing);
         });
     };
 

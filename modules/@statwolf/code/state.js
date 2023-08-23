@@ -19,6 +19,8 @@ export default function({ context, log }) {
             state
         }
 
+        log(_state);
+
         _ee.emit('change', _state);
     };
 

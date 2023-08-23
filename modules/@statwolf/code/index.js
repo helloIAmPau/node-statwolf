@@ -1,6 +1,8 @@
 import envWidget from "./components/env-widget";
 import push from './components/push';
 import exec from './components/exec';
+import view from "./components/view";
+import notification from "./components/notification";
 
 import { setDefaultLogger } from "@statwolf/statwolf";
 
@@ -18,11 +20,15 @@ const activate = function(context) {
     setDefaultLogger(log);
 
     const state = State({ context, log });
+    const viewProvider = view({ context, log });
+    const notify = notification({ state, context, log });
     
     const input = {
         state,
         context,
-        log
+        log,
+        viewProvider,
+        notify
     };
 
     push(input);

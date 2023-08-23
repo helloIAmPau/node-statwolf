@@ -23,7 +23,7 @@ export default function({ state, context }) {
     widget.command = 'statwolf.selectEnv';
 
     const subscription = state.subscribe(function({ config: { hosts }, state: { currentEnv } }) {
-        widget.text = `$(account) ${ hosts[currentEnv] || 'Invalid host. Check configuration' }`;
+        widget.text = `$(account) ${ hosts[currentEnv].replace(/\:[a-z0-9].+\@/i, ':***@') || 'Invalid host. Check configuration' }`;
         list = hosts;
     });
     context.subscriptions.push(subscription);

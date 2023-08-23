@@ -1,9 +1,7 @@
 import { commands, window, ThemeColor } from 'vscode';
 import { exec } from '@statwolf/statwolf';
 
-import ViewProvider from './view-provider';
-
-export default function({ state, context, log }) {
+export default function({ state, context, log, viewProvider, notify }) {
     let host = null;
     let isExecuting = false;
     
@@ -11,12 +9,6 @@ export default function({ state, context, log }) {
         host = hosts[currentEnv];
     });
     context.subscriptions.push(subscription);
-
-    const viewProvider = new ViewProvider({ log, context });
-	const execProvider = window.registerWebviewViewProvider('statwolf-execute-panel', viewProvider, {
-        retainContextWhenHidden: true
-    });
-    context.subscriptions.push(execProvider);
 
     const execCommand = commands.registerTextEditorCommand('statwolf.execute', function({ document }) {
         if(isExecuting === true) {
@@ -40,8 +32,14 @@ export default function({ state, context, log }) {
             host
         }).then(function(result) {
             viewProvider.setRetult(result);
-        }).catch(function(error) {
-            log(error);
+        }).catch(function({ message, stack }) {
+            log(message);
+            viewProvider.setRetult({
+                Success: true,
+                Data: {
+                    Exceptions: [ { message, stack } ]
+                }
+            });
         }).finally(function() {
             isExecuting = false;
         });

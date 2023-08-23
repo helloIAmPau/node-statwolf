@@ -1,0 +1,298 @@
+<html>
+    <head>
+        <style>
+            * {
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+
+            body {
+                height: 100svh;
+            }
+
+            .wrapper {
+                display: flex;
+                gap: 10px;
+                flex-direction: column;
+                padding-bottom: 10px;
+                height: calc(100% - 1.5rem - 10px);
+            }
+
+            .row-direction {
+                flex-direction: row;
+            }
+
+            .box {
+                display: flex;
+                flex-grow: 1;
+                max-height: calc(50% - 10px);
+                max-width: 100%;
+                gap: 10px;
+                flex-direction: column;
+            }
+
+            .rotate-box {
+                max-height: 100%;
+                max-width: 50%;
+            }
+
+            .full {
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+            .card {
+                border: 1px solid var(--vscode-widget-border);
+                flex-grow: 1;
+                background-color: var(--vscode-editor-background);
+                border-radius: 5px;
+                padding: 10px;
+                font-family: var(--vscode-editor-font-family);
+                overflow: scroll;
+            }
+
+            .button {
+                cursor: pointer;
+                margin-left: 5px;
+            }
+
+            .main-toolbar {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+
+            .spinner {
+                display: flex;
+                gap: 5px;
+                align-items: center;
+            }
+
+            .hide {
+                display: none;
+            }
+
+            @keyframes spin {
+                from {
+                    transform:rotate(0deg);
+                }
+                to {
+                    transform:rotate(360deg);
+                }
+            }
+
+            .spin {
+                animation-name: spin;
+                animation-duration: 1s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+            }
+
+            .toolbar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main-toolbar">
+            <h2 class="button" id="rotate-button" title="Rotate">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" t="1569683455503" viewBox="0 0 1024 1024" version="1.1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M672 418H144c-17.7 0-32 14.3-32 32v414c0 17.7 14.3 32 32 32h528c17.7 0 32-14.3 32-32V450c0-17.7-14.3-32-32-32z m-44 402H188V494h440v326z"></path>
+                    <path d="M819.3 328.5c-78.8-100.7-196-153.6-314.6-154.2l-0.2-64c0-6.5-7.6-10.1-12.6-6.1l-128 101c-4 3.1-3.9 9.1 0 12.3L492 318.6c5.1 4 12.7 0.4 12.6-6.1v-63.9c12.9 0.1 25.9 0.9 38.8 2.5 42.1 5.2 82.1 18.2 119 38.7 38.1 21.2 71.2 49.7 98.4 84.3 27.1 34.7 46.7 73.7 58.1 115.8 11 40.7 14 82.7 8.9 124.8-0.7 5.4-1.4 10.8-2.4 16.1h74.9c14.8-103.6-11.3-213-81-302.3z"></path>
+                </svg>
+            </h2>
+            <div class="hide spinner" id="spinner">
+                <h2>
+                    <svg class="spin" stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd" d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"></path>
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12H19C19 15.866 15.866 19 12 19V22Z" fill="currentColor"></path>
+                        <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z" fill="currentColor"></path>
+                    </svg>
+                </h2>
+                
+                Pushing...
+            </div>
+            <h2 class="hide" id="error">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 6h2v5h-2zm0 6h2v2h-2z"></path>
+                    <path d="M20 2H4c-1.103 0-2 .897-2 2v18l5.333-4H20c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm0 14H6.667L4 18V4h16v12z"></path>
+                </svg>
+            </h2>
+        </div>
+        <div class="wrapper">
+            <div class="box" id="result-box">
+                <div class="toolbar">
+                    <h2>Result</h2>
+                    <div>
+                        <span class="button" title="Copy content" id="result-copy-button">
+                            <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2V1H10V2H5ZM4.75 0C4.33579 0 4 0.335786 4 0.75V1H3.5C2.67157 1 2 1.67157 2 2.5V12.5C2 13.3284 2.67157 14 3.5 14H7V13H3.5C3.22386 13 3 12.7761 3 12.5V2.5C3 2.22386 3.22386 2 3.5 2H4V2.25C4 2.66421 4.33579 3 4.75 3H10.25C10.6642 3 11 2.66421 11 2.25V2H11.5C11.7761 2 12 2.22386 12 2.5V7H13V2.5C13 1.67157 12.3284 1 11.5 1H11V0.75C11 0.335786 10.6642 0 10.25 0H4.75ZM9 8.5C9 8.77614 8.77614 9 8.5 9C8.22386 9 8 8.77614 8 8.5C8 8.22386 8.22386 8 8.5 8C8.77614 8 9 8.22386 9 8.5ZM10.5 9C10.7761 9 11 8.77614 11 8.5C11 8.22386 10.7761 8 10.5 8C10.2239 8 10 8.22386 10 8.5C10 8.77614 10.2239 9 10.5 9ZM13 8.5C13 8.77614 12.7761 9 12.5 9C12.2239 9 12 8.77614 12 8.5C12 8.22386 12.2239 8 12.5 8C12.7761 8 13 8.22386 13 8.5ZM14.5 9C14.7761 9 15 8.77614 15 8.5C15 8.22386 14.7761 8 14.5 8C14.2239 8 14 8.22386 14 8.5C14 8.77614 14.2239 9 14.5 9ZM15 10.5C15 10.7761 14.7761 11 14.5 11C14.2239 11 14 10.7761 14 10.5C14 10.2239 14.2239 10 14.5 10C14.7761 10 15 10.2239 15 10.5ZM14.5 13C14.7761 13 15 12.7761 15 12.5C15 12.2239 14.7761 12 14.5 12C14.2239 12 14 12.2239 14 12.5C14 12.7761 14.2239 13 14.5 13ZM14.5 15C14.7761 15 15 14.7761 15 14.5C15 14.2239 14.7761 14 14.5 14C14.2239 14 14 14.2239 14 14.5C14 14.7761 14.2239 15 14.5 15ZM8.5 11C8.77614 11 9 10.7761 9 10.5C9 10.2239 8.77614 10 8.5 10C8.22386 10 8 10.2239 8 10.5C8 10.7761 8.22386 11 8.5 11ZM9 12.5C9 12.7761 8.77614 13 8.5 13C8.22386 13 8 12.7761 8 12.5C8 12.2239 8.22386 12 8.5 12C8.77614 12 9 12.2239 9 12.5ZM8.5 15C8.77614 15 9 14.7761 9 14.5C9 14.2239 8.77614 14 8.5 14C8.22386 14 8 14.2239 8 14.5C8 14.7761 8.22386 15 8.5 15ZM11 14.5C11 14.7761 10.7761 15 10.5 15C10.2239 15 10 14.7761 10 14.5C10 14.2239 10.2239 14 10.5 14C10.7761 14 11 14.2239 11 14.5ZM12.5 15C12.7761 15 13 14.7761 13 14.5C13 14.2239 12.7761 14 12.5 14C12.2239 14 12 14.2239 12 14.5C12 14.7761 12.2239 15 12.5 15Z" fill="currentColor"></path>
+                            </svg>
+                        </span>
+                        <span class="button" title="Toggle fullscreen" id="result-fullscreen-button">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"></path>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <pre class="card" id="result-pre"></pre>
+            </div>
+    
+            <div class="box" id="log-box">
+                <div class="toolbar">
+                    <h2>Log</h2>
+                    <div>
+                        <span class="button" title="Copy content" id="log-copy-button">
+                            <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2V1H10V2H5ZM4.75 0C4.33579 0 4 0.335786 4 0.75V1H3.5C2.67157 1 2 1.67157 2 2.5V12.5C2 13.3284 2.67157 14 3.5 14H7V13H3.5C3.22386 13 3 12.7761 3 12.5V2.5C3 2.22386 3.22386 2 3.5 2H4V2.25C4 2.66421 4.33579 3 4.75 3H10.25C10.6642 3 11 2.66421 11 2.25V2H11.5C11.7761 2 12 2.22386 12 2.5V7H13V2.5C13 1.67157 12.3284 1 11.5 1H11V0.75C11 0.335786 10.6642 0 10.25 0H4.75ZM9 8.5C9 8.77614 8.77614 9 8.5 9C8.22386 9 8 8.77614 8 8.5C8 8.22386 8.22386 8 8.5 8C8.77614 8 9 8.22386 9 8.5ZM10.5 9C10.7761 9 11 8.77614 11 8.5C11 8.22386 10.7761 8 10.5 8C10.2239 8 10 8.22386 10 8.5C10 8.77614 10.2239 9 10.5 9ZM13 8.5C13 8.77614 12.7761 9 12.5 9C12.2239 9 12 8.77614 12 8.5C12 8.22386 12.2239 8 12.5 8C12.7761 8 13 8.22386 13 8.5ZM14.5 9C14.7761 9 15 8.77614 15 8.5C15 8.22386 14.7761 8 14.5 8C14.2239 8 14 8.22386 14 8.5C14 8.77614 14.2239 9 14.5 9ZM15 10.5C15 10.7761 14.7761 11 14.5 11C14.2239 11 14 10.7761 14 10.5C14 10.2239 14.2239 10 14.5 10C14.7761 10 15 10.2239 15 10.5ZM14.5 13C14.7761 13 15 12.7761 15 12.5C15 12.2239 14.7761 12 14.5 12C14.2239 12 14 12.2239 14 12.5C14 12.7761 14.2239 13 14.5 13ZM14.5 15C14.7761 15 15 14.7761 15 14.5C15 14.2239 14.7761 14 14.5 14C14.2239 14 14 14.2239 14 14.5C14 14.7761 14.2239 15 14.5 15ZM8.5 11C8.77614 11 9 10.7761 9 10.5C9 10.2239 8.77614 10 8.5 10C8.22386 10 8 10.2239 8 10.5C8 10.7761 8.22386 11 8.5 11ZM9 12.5C9 12.7761 8.77614 13 8.5 13C8.22386 13 8 12.7761 8 12.5C8 12.2239 8.22386 12 8.5 12C8.77614 12 9 12.2239 9 12.5ZM8.5 15C8.77614 15 9 14.7761 9 14.5C9 14.2239 8.77614 14 8.5 14C8.22386 14 8 14.2239 8 14.5C8 14.7761 8.22386 15 8.5 15ZM11 14.5C11 14.7761 10.7761 15 10.5 15C10.2239 15 10 14.7761 10 14.5C10 14.2239 10.2239 14 10.5 14C10.7761 14 11 14.2239 11 14.5ZM12.5 15C12.7761 15 13 14.7761 13 14.5C13 14.2239 12.7761 14 12.5 14C12.2239 14 12 14.2239 12 14.5C12 14.7761 12.2239 15 12.5 15Z" fill="currentColor"></path>
+                            </svg>
+                        </span>
+                        <span class="button" title="Toggle fullscreen" id="log-fullscreen-button">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"></path>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <pre class="card" id="log-pre"></pre>
+            </div>
+        </div>
+
+        <script>
+            (function() {
+                const vscode = acquireVsCodeApi();
+
+                const wrapper = document.querySelector('.wrapper');
+                const rotateButton = document.querySelector('#rotate-button');
+                const resultBox = document.querySelector('#result-box');
+                const logBox = document.querySelector('#log-box');
+                const resultPre = document.querySelector('#result-pre');
+                const logPre = document.querySelector('#log-pre');
+                const resultCopyButton = document.querySelector('#result-copy-button');
+                const logCopyButton = document.querySelector('#log-copy-button');
+                const resultFullscreenButton = document.querySelector('#result-fullscreen-button');
+                const logFullscreenButton = document.querySelector('#log-fullscreen-button');
+                const errorIcon = document.querySelector('#error');
+                const spinner = document.querySelector('#spinner');
+
+                const fullscreen = function(box, toHide) {
+                    if(toHide.classList.contains('hide') === true) {
+                        toHide.classList.remove('hide');
+                        box.classList.remove('full');
+                    } else {
+                        toHide.classList.add('hide');
+                        box.classList.add('full');
+                    }
+                };
+
+                logFullscreenButton.onclick = function() {
+                    fullscreen(logBox, resultBox);
+                };
+
+                resultFullscreenButton.onclick = function() {
+                    fullscreen(resultBox, logBox);
+                };
+
+                const copy = function(pre) {
+                    navigator.clipboard.writeText(pre.textContent);
+                };
+
+                logCopyButton.onclick = function() {
+                    copy(logPre);
+                };
+
+                resultCopyButton.onclick = function() {
+                    copy(resultPre);
+                };
+
+                rotateButton.onclick = function() {
+                    const previousState = vscode.getState();
+                    const newState = { ...previousState, rotate: !previousState.rotate };
+                    vscode.setState(newState);
+                    render(newState);
+                };
+
+                const render = function({ data, rotate, spin, error }) {
+                    console.log({
+                        data,
+                        rotate,
+                        spin,
+                        error
+                    });
+                    if(data != null) {
+                        if(data.Data.Exceptions != null) {
+                            resultPre.textContent = data.Data.Exceptions.map(function({ message, stack }) {
+                                return stack;
+                            }).join('\n');
+                            logPre.textContent = '';
+                        } else {
+                            resultPre.textContent = JSON.stringify(data.Data.result);
+                            logPre.textContent = data.Data.logs.map(function({ msg }) {
+                                return msg;
+                            }).join('\n');
+                        }
+                    }
+
+                    if(rotate === true) {
+                        wrapper.classList.add('row-direction');
+                        resultBox.classList.add('rotate-box');
+                        logBox.classList.add('rotate-box');
+                    } else {
+                        wrapper.classList.remove('row-direction');
+                        resultBox.classList.remove('rotate-box');
+                        logBox.classList.remove('rotate-box');
+                    }
+
+                    if(spin === true) {
+                        spinner.classList.remove('hide');
+                    } else {
+                        spinner.classList.add('hide');
+                    }
+
+                    if(error != null && spin !== true) {
+                        errorIcon.classList.remove('hide');
+                        errorIcon.title = error;
+                    } else {
+                        errorIcon.classList.add('hide');
+                    }
+                }
+
+                window.addEventListener('message', function({ data: { type, data, spin, error } }) {
+                    if(type === 'result') {
+                        const previousState = vscode.getState();
+                        const newState = { ...previousState, data };
+                        vscode.setState(newState);
+                        render(newState);
+                        
+                        return;
+                    }
+
+                    if(type === 'spin') {
+                        const previousState = vscode.getState();
+                        const newState = { ...previousState, spin };
+                        vscode.setState(newState);
+                        render(newState);
+                        
+                        return;
+                    }
+
+                    if(type === 'error') {
+                        const previousState = vscode.getState();
+                        const newState = { ...previousState, error };
+                        vscode.setState(newState);
+                        render(newState);
+                        
+                        return;
+                    }
+                });
+
+                const previousState = vscode.getState();
+                render(previousState);
+            })();
+        </script>
+    </body>
+</html>
