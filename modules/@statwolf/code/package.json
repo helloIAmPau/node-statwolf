@@ -26,6 +26,9 @@
       "explorer/context": [
         {
           "command": "statwolf.pushFolder"
+        },
+        {
+          "command": "statwolf.createTemplate"
         }
       ]
     },
@@ -62,6 +65,10 @@
       {
         "command": "statwolf.pushFolder",
         "title": "Push current folder"
+      },
+      {
+        "command": "statwolf.createTemplate",
+        "title": "Create a statwolf service from template"
       }
     ],
     "views": {

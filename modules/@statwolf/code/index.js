@@ -3,6 +3,7 @@ import push from './components/push';
 import exec from './components/exec';
 import view from "./components/view";
 import notification from "./components/notification";
+import template from './components/template';
 
 import { setDefaultLogger } from "@statwolf/statwolf";
 
@@ -31,6 +32,7 @@ const activate = function(context) {
         notify
     };
 
+    template(input);
     push(input);
     exec(input);
     envWidget(input);
