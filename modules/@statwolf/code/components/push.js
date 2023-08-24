@@ -1,7 +1,9 @@
 import { bundle } from '@statwolf/statwolf';
 import { commands, workspace } from 'vscode';
-import { dirname, sep, join } from 'path';
+import { dirname } from 'path';
 import debounce from 'debounce';
+import path from '../path';
+import { lstat } from 'fs/promises';
 
 export default function({ state, context, log, viewProvider, notify }) {
     let host = null;
@@ -47,7 +49,7 @@ export default function({ state, context, log, viewProvider, notify }) {
 
     const subscription = state.subscribe(function({ config: { hosts, project: projectPath }, state: { currentEnv } }) {
         host = hosts[currentEnv];
-        project = projectPath;
+        project = path(projectPath);
     });
     context.subscriptions.push(subscription);
 
@@ -62,17 +64,25 @@ export default function({ state, context, log, viewProvider, notify }) {
     context.subscriptions.push(fullPushCommand);
 
     const pushFolder = function(fileName) {
+        fileName = path(fileName);
+
         if(fileName.startsWith(project) === false) {
             return;
         }
 
-        const file = dirname(fileName.replace(project, 'Statwolf'));
+        return lstat(fileName).then(function(info) {
+            if(info.isDirectory() === false) {
+                fileName = dirname(fileName);
+            }
+            
+            const file = fileName.replace(project, 'Statwolf');
 
-        log(`Pushing ${ file }...`);
-
-        push({
-            input: [ file ],
-            drop: false
+            log(`Pushing ${ file }...`);
+    
+            return push({
+                input: [ file ],
+                drop: false
+            });
         });
     };
 
@@ -83,8 +93,8 @@ export default function({ state, context, log, viewProvider, notify }) {
             return;
         }
        
-        const { path } = context;
-        pushFolder(path);
+        const { fsPath } = context;
+        pushFolder(fsPath);
     });
     context.subscriptions.push(pushFolderCommand);
 

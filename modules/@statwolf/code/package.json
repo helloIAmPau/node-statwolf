@@ -102,8 +102,8 @@
             "title": "Host"
           },
           "default": [
-            "https://statwolf:test123@portal.statwolf",
-            "https://boss:test123@portal.statwolf"
+            "http://statwolf:test123@portal.statwolf",
+            "http://boss:test123@portal.statwolf"
           ]
         }
       }

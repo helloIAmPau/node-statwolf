@@ -8,7 +8,7 @@
             }
 
             body {
-                height: 100svh;
+                height: 98svh;
             }
 
             .wrapper {
@@ -210,7 +210,7 @@
                 };
 
                 rotateButton.onclick = function() {
-                    const previousState = vscode.getState();
+                    const previousState = vscode.getState() || {};
                     const newState = { ...previousState, rotate: !previousState.rotate };
                     vscode.setState(newState);
                     render(newState);
@@ -262,8 +262,9 @@
                 }
 
                 window.addEventListener('message', function({ data: { type, data, spin, error } }) {
+                    const previousState = vscode.getState() || {};
+
                     if(type === 'result') {
-                        const previousState = vscode.getState();
                         const newState = { ...previousState, data };
                         vscode.setState(newState);
                         render(newState);
@@ -272,7 +273,6 @@
                     }
 
                     if(type === 'spin') {
-                        const previousState = vscode.getState();
                         const newState = { ...previousState, spin };
                         vscode.setState(newState);
                         render(newState);
@@ -281,7 +281,6 @@
                     }
 
                     if(type === 'error') {
-                        const previousState = vscode.getState();
                         const newState = { ...previousState, error };
                         vscode.setState(newState);
                         render(newState);
@@ -290,7 +289,7 @@
                     }
                 });
 
-                const previousState = vscode.getState();
+                const previousState = vscode.getState() || {};
                 render(previousState);
             })();
         </script>
