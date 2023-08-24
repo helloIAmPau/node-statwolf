@@ -1,20 +1,15 @@
-import { commands, window, ThemeColor } from 'vscode';
-import { exec } from '@statwolf/statwolf';
+import { commands } from 'vscode';
+import { exec, abortController } from '@statwolf/statwolf';
 
 export default function({ state, context, log, viewProvider, notify }) {
     let host = null;
     let isExecuting = false;
+    let controller = null;
     
-    const subscription = state.subscribe(function({ config: { hosts }, state: { currentEnv } }) {
-        host = hosts[currentEnv];
-    });
-    context.subscriptions.push(subscription);
-
-    const execCommand = commands.registerTextEditorCommand('statwolf.execute', function({ document }) {
+    const execute =  function(code) {
         if(isExecuting === true) {
-            log('Already executing. Skipping...');
-
-            return;
+            log('Already executing. Aborting previous command');
+            controller.abort();
         }
 
         if(host == null) {
@@ -24,15 +19,27 @@ export default function({ state, context, log, viewProvider, notify }) {
         }
 
         isExecuting = true;
+        controller = abortController();
+        viewProvider.setRetult({
+            Success: true,
+            Data: {
+                result: 'Loading...',
+                logs: [ { msg: 'Loading...' } ]
+            }
+        });
 
-        const code = document.getText();
-
-        exec({
+        const p = exec({
             code,
-            host
+            host,
+            abortController: controller
         }).then(function(result) {
             viewProvider.setRetult(result);
-        }).catch(function({ message, stack }) {
+            isExecuting = false;
+        }).catch(function({ message, stack, name }) {
+            if(name === 'AbortError') {
+                return;
+            }
+
             log(message);
             viewProvider.setRetult({
                 Success: true,
@@ -40,9 +47,42 @@ export default function({ state, context, log, viewProvider, notify }) {
                     Exceptions: [ { message, stack } ]
                 }
             });
-        }).finally(function() {
             isExecuting = false;
         });
+
+        notify('Executing code...', null, p);
+    };
+
+    const subscription = state.subscribe(function({ config: { hosts }, state: { currentEnv } }) {
+        host = hosts[currentEnv];
+    });
+    context.subscriptions.push(subscription);
+
+    const execCommandTab = commands.registerTextEditorCommand('statwolf.executeTab', function({ document }) {
+        const code = `
+        var result = (function() {
+          ${ document.getText() }
+        })();
+      
+        if(_.isPlainObject(result)) {
+          result = [ result ];
+        }
+        if(_.isArray(result) && _.every(result, (i) => _.isPlainObject(i)))
+          var parser = $compiler.service('Statwolf.Utils.CSVParser');
+          result = parser.jsonToCsv(result, '\t');
+      
+      
+        return result;
+        `;
+
+        execute(code);
+    });
+    context.subscriptions.push(execCommandTab);
+
+    const execCommand = commands.registerTextEditorCommand('statwolf.execute', function({ document }) {
+        const code = document.getText();
+
+        execute(code);
     });
     context.subscriptions.push(execCommand);
 }

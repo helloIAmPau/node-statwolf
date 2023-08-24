@@ -24,9 +24,9 @@ export default function({ state, context, log, viewProvider, notify }) {
         }
 
         isPushing = true;
-        viewProvider.setSpin(isPushing);
+        //viewProvider.setSpin(isPushing);
 
-        bundle({
+        const p = bundle({
             input,
             drop,
             host,
@@ -35,7 +35,7 @@ export default function({ state, context, log, viewProvider, notify }) {
             const message = `${ Object.keys(result.Data).length } file pushed`;
             
             log(message);
-            notify(message);
+            notify(message, null, 2000);
             viewProvider.setError(undefined);
         }).catch(function({ message }) {
             log(message);
@@ -43,8 +43,10 @@ export default function({ state, context, log, viewProvider, notify }) {
             viewProvider.setError(message);
         }).finally(function() {
             isPushing = false;
-            viewProvider.setSpin(isPushing);
+            //viewProvider.setSpin(isPushing);
         });
+
+        notify('Pushing files...', null, p);
     };
 
     const subscription = state.subscribe(function({ config: { hosts, project: projectPath }, state: { currentEnv } }) {

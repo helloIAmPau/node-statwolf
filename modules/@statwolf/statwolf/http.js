@@ -1,7 +1,13 @@
 import { gzip } from 'zlib';
 
+export const createController = function() {
+  const controller = new AbortController();
+
+  return controller;
+};
+
 export default function(host, options = {}) {
-  const { zip } = options;
+  const { zip, controller } = options;
   const { username, password, origin } = new URL(host);
 
   const fullPath = `${ origin }/api/Custom/DashboardToolbox`;
@@ -35,6 +41,7 @@ export default function(host, options = {}) {
     }).then(function(body) {
       return fetch(fullPath, {
         method: 'POST',
+        signal: controller != null ? controller.signal : undefined,
         headers: {
           'Content-Type': 'application/json',
           'statwolf-encoding': zip === true ? 'gzip' : 'plain'

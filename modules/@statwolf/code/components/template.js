@@ -27,11 +27,19 @@ export default function({ state, context, log }) {
                 step: 1,
                 totalSteps: 2
             }).then(function(type) {
+                if(type == null) {
+                    return;
+                }
+
                 return window.showInputBox({
                     title: 'Insert Name',
                     step: 2,
                     totalSteps: 2
                 }).then(function(name) {
+                    if(name == null || name.length === 0) {
+                        return;
+                    }
+
                     const input = {
                         project,
                         folder: fsPath.replace(project, 'Statwolf'),

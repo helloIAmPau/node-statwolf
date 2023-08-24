@@ -1,5 +1,6 @@
 import page from './index.html';
-import { window } from 'vscode';
+import { window, Uri } from 'vscode';
+import { compiler } from '@statwolf/handlebars';
 
 class ViewProvider {
     constructor({ log, context }) {
@@ -54,10 +55,17 @@ class ViewProvider {
         const { webview } = panel;
 
         webview.options = {
-            enableScripts: true
+            enableScripts: true,
+            enableFindWidget: true
         };
 
-        webview.html = page;
+        webview.html = compiler(page, {
+            app_js: webview.asWebviewUri(Uri.joinPath(this._context.extensionUri, 'media', 'assets', 'app.js')),
+            styles_css: webview.asWebviewUri(Uri.joinPath(this._context.extensionUri, 'media', 'assets', 'styles.css')),
+            hljs_js: webview.asWebviewUri(Uri.joinPath(this._context.extensionUri, 'media', 'assets', 'hljs', 'highlight.min.js')),
+            hljs_css: webview.asWebviewUri(Uri.joinPath(this._context.extensionUri, 'media', 'assets', 'hljs', 'default.min.css')),
+            hljs_javascript_js: webview.asWebviewUri(Uri.joinPath(this._context.extensionUri, 'media', 'assets', 'hljs', 'javascript.min.js'))
+        });
 
         panel.onDidChangeVisibility(() => {
             if(panel.visible === false) {

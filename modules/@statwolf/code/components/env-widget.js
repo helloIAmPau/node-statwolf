@@ -5,7 +5,12 @@ export default function({ state, context, log }) {
 
     const subscription = state.subscribe(function({ config: { hosts }, state: { currentEnv } }) {
         widget.text = `$(account) ${ (hosts[currentEnv] || 'Invalid host. Check configuration').replace(/\:[a-z0-9].+\@/i, ':***@') }`;
-        list = hosts;
+        list = hosts.map(function(url) {
+            return {
+                url,
+                label: url.replace(/\:[a-z0-9].+\@/i, ':***@')
+            }
+        });
     });
     context.subscriptions.push(subscription);
 
@@ -14,10 +19,18 @@ export default function({ state, context, log }) {
     widget.text = '$(account) Loading...';
 
     const command = commands.registerCommand('statwolf.selectEnv', function() {
-        window.showQuickPick(list, {
+        window.showQuickPick(list.map(function({ label }) {
+            return label;
+        }), {
             title: 'Select environment'
         }).then(function(selected) {
-            const index = list.indexOf(selected);
+            if(selected == null) {
+                return;
+            }
+
+            const index = list.findIndex(function(item) {
+                return item.label === selected;
+            });
 
             state.setState(function(current) {
                 return {

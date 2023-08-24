@@ -44,6 +44,11 @@
         "mac": "cmd+enter"
       },
       {
+        "command": "statwolf.executeTab",
+        "key": "ctrl+shift+enter",
+        "mac": "cmd+shift+enter"
+      },
+      {
         "command": "statwolf.fullPush",
         "key": "ctrl+alt+p",
         "mac": "cmd+alt+p"
@@ -57,6 +62,10 @@
       {
         "command": "statwolf.execute",
         "title": "Execute current buffer"
+      },
+      {
+        "command": "statwolf.executeTab",
+        "title": "Execute current buffer and convert result to csv"
       },
       {
         "command": "statwolf.fullPush",
@@ -95,11 +104,6 @@
         "statwolf.project": {
           "type": "string",
           "description": "Default statwolf project location"
-        },
-        "statwolf.showNotifications": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show/hide notification messages"
         },
         "statwolf.hosts": {
           "type": "array",

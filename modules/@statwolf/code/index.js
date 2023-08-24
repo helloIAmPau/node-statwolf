@@ -22,7 +22,7 @@ const activate = function(context) {
 
     const state = State({ context, log });
     const viewProvider = view({ context, log });
-    const notify = notification({ state, context, log });
+    const notify = notification();
     
     const input = {
         state,
