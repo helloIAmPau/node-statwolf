@@ -1,9 +1,11 @@
 {
   "name": "@statwolf/repo",
   "scripts": {
-    "extension": "npm --workspace code run extension"
+    "extension": "npm --workspace code run extension",
+    "bump": "npm version -ws --include-workspace-root"
   },
   "workspaces": [
     "modules/**/*"
-  ]
+  ],
+  "version": "0.0.1"
 }
