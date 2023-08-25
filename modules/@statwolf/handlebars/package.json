@@ -2,5 +2,6 @@
   "name": "@statwolf/handlebars",
   "devDependencies": {
     "handlebars": "4.7.8"
-  }
+  },
+  "version": "0.0.1"
 }
