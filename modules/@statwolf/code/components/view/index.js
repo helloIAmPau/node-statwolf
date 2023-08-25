@@ -6,10 +6,24 @@ class ViewProvider {
     constructor({ log, context }) {
         this._log = log;
         this._context = context;
+        this._maxRows = 0;
+    }
+
+    setMaxRows(maxRows) {
+        this._maxRows = maxRows;
     }
 
     setRetult(data) {
         this._data = data;
+
+        if(this._data.Data.result != null && typeof(this._data.Data.result) !== 'string') {
+            this._data.Data.result = JSON.stringify(this._data.Data.result, null, 2);
+        }
+
+        const splitted = this._data.Data.result.split('\n');
+        if(splitted.length > this._maxRows) {
+            this._data.Data.result = splitted.slice(0, this._maxRows).concat([ '[ ... ]' ]).join('\n');
+        }
 
         if(this._panel == null) {
             return;
@@ -18,7 +32,7 @@ class ViewProvider {
         const { webview } = this._panel;
         webview.postMessage({
             type: 'result',
-            data
+            data: this._data
         });
     }
 

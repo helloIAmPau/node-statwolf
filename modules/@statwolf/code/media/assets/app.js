@@ -1,4 +1,11 @@
 (function() {
+    let _data = {
+        Data: {
+            results: '',
+            logs: []
+        }
+    };
+
     const vscode = acquireVsCodeApi();
 
     const wrapper = document.querySelector('.wrapper');
@@ -51,25 +58,24 @@
         render(newState);
     };
 
-    const render = function({ data, rotate, spin, error }) {
+    const render = function({ rotate, spin, error }) {
         console.log({
-            data,
+            _data,
             rotate,
             spin,
             error
         });
-        if(data != null) {
-            if(data.Data.Exceptions != null) {
-                resultPre.textContent = data.Data.Exceptions.map(function({ message, stack }) {
-                    return stack;
+        if(_data != null) {
+            if(_data.Data.Exceptions != null) {
+                resultPre.textContent = _data.Data.Exceptions.map(function({ message, stack }) {
+                    return `${ message }\n${ stack }`;
                 }).join('\n');
                 logPre.textContent = '';
             } else {
-                
-                resultPre.innerHTML = typeof(data.Data.result) === 'string' ? data.Data.result : hljs.highlight(JSON.stringify(data.Data.result, null, 2), {
-                    language: 'javascript'
+                resultPre.innerHTML = hljs.highlight(_data.Data.result, {
+                   language: 'javascript'
                 }).value;
-                logPre.textContent = data.Data.logs.map(function({ msg }) {
+                logPre.textContent = _data.Data.logs.map(function({ msg }) {
                     return msg;
                 }).join('\n');
             }
@@ -103,9 +109,8 @@
         const previousState = vscode.getState() || {};
 
         if(type === 'result') {
-            const newState = { ...previousState, data };
-            vscode.setState(newState);
-            render(newState);
+            _data = data;
+            render(previousState);
             
             return;
         }

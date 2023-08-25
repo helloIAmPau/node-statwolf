@@ -53,8 +53,9 @@ export default function({ state, context, log, viewProvider, notify }) {
         notify('Executing code...', null, p);
     };
 
-    const subscription = state.subscribe(function({ config: { hosts }, state: { currentEnv } }) {
+    const subscription = state.subscribe(function({ config: { hosts, maxOutputRows }, state: { currentEnv } }) {
         host = hosts[currentEnv];
+        viewProvider.setMaxRows(maxOutputRows);
     });
     context.subscriptions.push(subscription);
 

@@ -105,6 +105,11 @@
           "type": "string",
           "description": "Default statwolf project location"
         },
+        "statwolf.maxOutputRows": {
+          "type": "number",
+          "description": "Set max output size (as rows number)",
+          "default": 100000
+        },
         "statwolf.hosts": {
           "type": "array",
           "description": "List of statwolf endpoints",
