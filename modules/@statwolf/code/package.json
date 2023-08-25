@@ -3,7 +3,7 @@
   "displayName": "@statwolf/code",
   "icon": "media/icon.png",
   "publisher": "statwolf",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The statwolf default vscode extension",
   "main": "dist/index.js",
   "repository": {

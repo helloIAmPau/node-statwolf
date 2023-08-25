@@ -4,5 +4,5 @@
     "@babel/preset-env": "7.22.10",
     "@babel/core": "7.22.10"
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }
